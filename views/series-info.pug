@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+  head
+    title= 'Series Info: View all Details on Series'
+    script(type='text/javascript', src='https://cdn.tailwindcss.com')
+  body
+    header(class="text-white bg-indigo-500" )
+      div(class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center")
+        a(class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0")
+        span(class="ml-3 text-xl") Cricket Dashboard
+    section(class="text-gray-600 body-font overflow-hidden")
+      div(class="container px-5 py-24 mx-auto")
+        div(class="-my-8 divide-y-2 divide-gray-100")
+          each series in seriesInfo.data.sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+            div(class="py-8 flex flex-wrap md:flex-nowrap")
+              div(class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col")
+                span(class="font-semibold title-font text-gray-700") SERIES DETAILS
+                span(class="mt-1 text-gray-500 text-sm")= series.startDate
+              div(class="md:flex-grow")
+                h2(class="text-2xl font-medium text-gray-900 title-font mb-2")= series.name
+                p(class="leading-relaxed")= `End Date: ${series.endDate}`
+                p(class="leading-relaxed")= `ODI Matches: ${series.odi}`
+                p(class="leading-relaxed")= `T20 Matches: ${series.t20}`
+                p(class="leading-relaxed")= `Test Matches: ${series.test}`
+                p(class="leading-relaxed")= `Total Matches: ${series.matches}`

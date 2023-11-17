@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+  head
+    title= 'Scoreboard: View all Details on Recent Matches'
+    script(type='text/javascript', src='https://cdn.tailwindcss.com')
+  body
+    header(class="text-white bg-indigo-500" )
+      div(class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center")
+        a(class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0")
+        span(class="ml-3 text-xl") Cricket Dashboard
+    section(class="text-gray-600 body-font overflow-hidden")
+      div(class="container px-5 py-24 mx-auto")
+        div(class="-my-8 divide-y-2 divide-gray-100")
+          each match in detailEvents.data.sort((a, b) => new Date(b.date) - new Date(a.date))
+            div(class="py-8 flex flex-wrap md:flex-nowrap")
+              div(class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col")
+                span(class="font-semibold title-font text-gray-700") MATCH DETAILS
+                span(class="mt-1 text-gray-500 text-sm")= match.date
+              div(class="md:flex-grow")
+                h2(class="text-2xl font-medium text-gray-900 title-font mb-2")= match.name
+                p(class="leading-relaxed")= `Status: ${match.status}`
+                p(class="leading-relaxed")= `Venue: ${match.venue}`
+                p(class="leading-relaxed")= `Match Type: ${match.matchType}`
+                p(class="leading-relaxed")= `Teams: ${match.teams.join(' vs ')}`
+                each score in match.score
+                  p(class="leading-relaxed")= `${score.inning} - Runs: ${score.r}, Wickets: ${score.w}, Overs: ${score.o}`

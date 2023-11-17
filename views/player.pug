@@ -1,0 +1,71 @@
+doctype html
+html(lang="en")
+  head
+    title= 'Search for a player by name'
+    script(type='text/javascript', src='https://cdn.tailwindcss.com')
+    script.
+      document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('playerSearchForm').addEventListener('submit', async function(event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          // Get the player name from the input field
+          const playerName = document.getElementById('name').value.trim();
+
+
+          // Validate the input
+         if (!/^[A-Za-z\s]+$/.test(playerName)) {
+            alert('Please enter a valid player name with only alphabets.');
+            return;
+          }
+          try {
+            const response = await fetch('/search-players', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ name: playerName }),
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              displayPlayers(data); // Function to display players
+            } else {
+              console.error('Failed to fetch player data');
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        });
+
+        function displayPlayers(players) {
+          const playerResults = document.getElementById('playerResults');
+          playerResults.innerHTML = ''; // Clear previous results
+
+          players.forEach(player => {
+            const playerElement = document.createElement('div');
+            playerElement.innerHTML = `
+              <p>Name: ${player.name}</p>
+              <p>Country: ${player.country}</p>
+              <hr><br><br>
+            `;
+            playerResults.appendChild(playerElement);
+          });
+        }
+      });
+  body
+    header(class="text-white bg-indigo-500" )
+      div(class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center")
+        a(class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0")
+        span(class="ml-3 text-xl") Cricket Dashboard
+    section(class="text-gray-600 body-font relative")
+      div(class="container px-5 py-24 mx-auto")
+        div(class="lg:w-1/2 md:w-2/3 mx-auto")
+          div(class="flex flex-wrap -m-2")
+            div(class="p-2 w-1/2")
+              div(class="relative")
+                form(id="playerSearchForm")
+                    label(for="name", class="leading-7 text-sm text-gray-600") Player Name
+                    input(type="text", id="name", name="name", class="w-full my-2 bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out")
+                    input(type="submit",value="Search", class="flex mx-auto my-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg")
+
+                div(id="playerResults" class="mt-4") 
